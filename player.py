@@ -34,7 +34,7 @@ import sys
 #     return all_sprites
 
 
-class Player(pygame.sprite.Sprite):
+class Player():
     GRAVITY = 1
     PLAYER_COLOR = pygame.Color("blue")
 
@@ -47,7 +47,8 @@ class Player(pygame.sprite.Sprite):
         self.animation_count = 0
         self.fall_count = 0
         self.jump_count = 0
-        self.surface = None
+        self.surface = pygame.Surface((self.rect.width, self.rect.height))
+        self.surface.fill(self.PLAYER_COLOR)
 
     def move(self, dx, dy):
         self.rect.x += dx
@@ -66,8 +67,10 @@ class Player(pygame.sprite.Sprite):
             self.animation_count = 0
 
     def jump(self):
-        self.y_vel = -self.GRAVITY * 8
-        self.jump_count += 1
+        print(self.y_vel)
+        if 0.5 > self.y_vel > -0.5 or self.jump_count > 0:
+            self.y_vel = -self.GRAVITY * 8
+            self.jump_count += 1
 
         if self.jump_count == 1:
             self.fall_count = 0
@@ -87,8 +90,6 @@ class Player(pygame.sprite.Sprite):
         self.y_vel *= -1
 
     def draw(self, screen):
-        self.surface = pygame.Surface((self.rect.width, self.rect.height))
-        self.surface.fill(self.PLAYER_COLOR)
         screen.blit(self.surface, (self.rect.x, self.rect.y))
 
 
@@ -139,7 +140,7 @@ def collide(player, objects, dx):
 def test_player():
     pygame.init()
     pygame.display.set_caption("Platformer Test")
-    screen = pygame.display.set_mode((640, 480))
+    screen = pygame.display.set_mode((1024, 576))
     clock = pygame.time.Clock()
 
     player = Player(100, 100, 32, 32)
