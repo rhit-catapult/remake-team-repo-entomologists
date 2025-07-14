@@ -1,40 +1,8 @@
 import pygame
 import sys
-# from os import listdir
-# from os.path import isfile, join
+import tiles as level
 
-
-
-# def flip(sprites):
-#     return [pygame.transform.flip(sprites, True, False) for _ in sprites]
-
-# def load_sprite_sheets(dir1, dir2, width, height, direction=False):
-#     path = join("assets", dir1, dir2)
-#     images = [f for f in listdir(path) if isfile(join(path, f))]
-#
-#     all_sprites = {}
-#
-#     for image in images:
-#         sprite_sheet = pygame.image.load(join(path, image)).convert_alpha()
-#
-#         sprites = []
-#
-#         for i in range(sprite_sheet.get_width() // width):
-#             surface = pygame.Surface((width, height), pygame.SRCALPHA, 32)
-#             rect = pygame.Rect(i * width, 0, width, height)
-#             surface.blit(sprite_sheet, (0, 0), rect)
-#             sprites.append(pygame.transform.scale2x(surface))
-#
-#         if direction:
-#             all_sprites[image.replace(".png", "") + "_right"] = sprites
-#             all_sprites[image.replace(".png", "") + "_left"] = flip(sprites)
-#         else:
-#             all_sprites[image.replace(".png", "")] = sprites
-#
-#     return all_sprites
-
-
-class Player():
+class Player:
     GRAVITY = 1
     PLAYER_COLOR = pygame.Color("blue")
 
@@ -67,7 +35,6 @@ class Player():
             self.animation_count = 0
 
     def jump(self):
-        print(self.y_vel)
         if 0.5 > self.y_vel > -0.5 or self.jump_count > 0:
             self.y_vel = -self.GRAVITY * 8
             self.jump_count += 1
@@ -144,8 +111,14 @@ def test_player():
     clock = pygame.time.Clock()
 
     player = Player(100, 100, 32, 32)
+
+    tile = level.Tile(0,screen)
+    tiles = [tile]*17 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2 + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] * 17
+    room = level.Room(tiles)
     while True:
         clock.tick(60)
+
+        screen.fill((40, 40, 50))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -155,17 +128,11 @@ def test_player():
                 if event.key == pygame.K_UP and player.jump_count < 2:
                     player.jump()
 
-        screen.fill("grey")
-
         player.loop(60)
 
-        rect = [pygame.Rect(50, 450, 200, 50), pygame.Rect(250, 400, 200, 100)]
-
-        for r in rect:
-            pygame.draw.rect(screen, "red", r)
-
-        handle_move(player, rect)
+        handle_move(player, room.rect_tiles)
         player.draw(screen)
+        room.draw()
         pygame.display.update()
 
 
