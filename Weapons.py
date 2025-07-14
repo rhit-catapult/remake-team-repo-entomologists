@@ -8,8 +8,8 @@ import bullet_program
 class Gun:
     def __init__(self, screen, x, y, image, bullet_speed, bullet_damage):
         self.screen = screen
-        self.pos_x = x# - 64
-        self.pos_y = y# - 42
+        self.pos_x = x
+        self.pos_y = y
         self.x = x
         self.y = y
         self.image = pygame.image.load(image)
@@ -19,7 +19,7 @@ class Gun:
         self.bullets = []
         self.image_rect = self.image.get_rect(center=(self.x, self.y))
 
-    def draw(self, mouse_pos_x, mouse_pos_y):
+    def draw(self, mouse_pos_x, mouse_pos_y):#draws the gun and calculats which way it should face and what it's angle should be
         drawn_image = self.image
         if mouse_pos_x > self.x:
             drawn_image = self.image_flipped
@@ -34,8 +34,8 @@ class Gun:
         dx = mouse_pos_x - self.image_rect.centerx
         dy = mouse_pos_y - self.image_rect.centery
         angle = math.degrees(math.atan2(-dy, dx))
-        bullet_speed_x = math.cos(angle)*mouse_pos_x - self.image_rect.center[0]
-        bullet_speed_y = math.sin(angle)*mouse_pos_y - self.image_rect.center[1]
+        bullet_speed_x = math.cos(angle)*mouse_pos_x - self.image_rect.center[0] * self.bullet_speed
+        bullet_speed_y = math.sin(angle)*mouse_pos_y - self.image_rect.center[1] * self.bullet_speed
         bullet = bullet_program.Bullet(self.screen, self.image_rect.center[0], self.image_rect.center[1], bullet_speed_x, bullet_speed_y)
         self.bullets.append(bullet)
 
@@ -61,6 +61,11 @@ def main():
         mouse_pos = pygame.mouse.get_pos()
 
         pygame.draw.circle(screen, (255, 0, 0), mouse_pos, 5)
+
+        if event.type == pygame.MOUSEBUTTONUP:
+            gun.shoot(mouse_pos[0], mouse_pos[1])
+        #bullet.draw()
+        #bullet.move()
 
         pygame.display.update()
 
