@@ -35,7 +35,6 @@ class Player:
             self.animation_count = 0
 
     def jump(self):
-        print(self.y_vel)
         if 0.5 > self.y_vel > -0.5 or self.jump_count > 0:
             self.y_vel = -self.GRAVITY * 8
             self.jump_count += 1
@@ -114,12 +113,12 @@ def test_player():
     player = Player(100, 100, 32, 32)
 
     tile = level.Tile(0,screen)
-    tile2 = level.Tile(-1,screen)
-    tiles = [tile]*17 + [tile2]*14 + [tile]*2 + [tile2]*14 + [tile]*2 + [tile2]*14 + [tile]*2 + [tile2]*15 + [tile] + [tile2]*15 + [tile] + [tile2]*15 + [tile] + [tile2]*15 + [tile] * 17
+    tiles = [tile]*17 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2 + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] * 17
     room = level.Room(tiles)
-    screen.fill((40, 40, 50))
     while True:
         clock.tick(60)
+
+        screen.fill((40, 40, 50))
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -129,11 +128,11 @@ def test_player():
                 if event.key == pygame.K_UP and player.jump_count < 2:
                     player.jump()
 
-        room.draw()
         player.loop(60)
 
         handle_move(player, room.rect_tiles)
         player.draw(screen)
+        room.draw()
         pygame.display.update()
 
 
