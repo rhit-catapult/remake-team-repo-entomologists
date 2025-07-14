@@ -3,7 +3,7 @@ import sys
 pygame.init()
 class Bullet:
     #origin is a tuple that contains coordinates (x,y)
-    def __init__(self,screen,image = 'placeholder',x=100,y=200,speed_x=6,speed_y=0):
+    def __init__(self,screen,x=100,y=200,speed_x=6,speed_y=0,image = 'placeholder'):
         self.screen = screen
         self.image = image
         #Unsure if collision is necessary to create upon initialization.
@@ -19,19 +19,19 @@ class Bullet:
         if self.image == 'placeholder':
             pygame.draw.line(self.screen,(255,100,100),(self.x,self.y),(self.x+25,self.y),5)
             self.hitbox = pygame.Rect(self.x,self.y,25,5)
-            self.hitbox.move_ip(self.speed_x,self.speed_y)
+
         else:
             self.screen.blit(pygame.image.load(self.image),(self.x, self.y))
 
             self.hitbox = (pygame.image.load(self.image)).get_rect()
-            #self.hitbox = self.hitbox.get_rect()
+
             self.hitbox.move_ip(self.x,self.y)
-            print(self.hitbox)
+
 
     def move(self):
         self.x += self.speed_x
         self.y += self.speed_y
-
+        
     def collision(self,rectangles):
         for rectangle in rectangles:
             if pygame.Rect.colliderect(self.hitbox, rectangle):
@@ -46,10 +46,10 @@ def bullet_update(bullets,rectangles):
         bullet.draw()
         if bullet.collision(rectangles):
             remove_bullet = True
-            print("splat")
+
 
         if bullet.x > bullet.origin_x + 1000:
-            print("pew")
+
             remove_bullet = True
         if remove_bullet:
             bullets.remove(bullet)
@@ -63,8 +63,8 @@ def debug():
     pygame.display.init()
     pygame.display.set_caption('Bullet Debug')
     screen = pygame.display.set_mode((800,600))
-    test_bullet = Bullet(screen,'Pistol.png')
-    test_bullet2 = Bullet(screen,'placeholder',100,75,6)
+    test_bullet = Bullet(screen,image='Pistol.png')
+    test_bullet2 = Bullet(screen,100,75,6)
 
     test_rect = pygame.rect.Rect(600,0,100,600)
     rectangles = []
@@ -83,7 +83,7 @@ def debug():
         pygame.draw.rect(screen,(255,0,0),test_rect)
         bullet_update(bullets,rectangles)
         pygame.display.update()
-
+debug()
 
 
 
