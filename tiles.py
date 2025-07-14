@@ -48,8 +48,10 @@ def test_level():
     tile2 = Tile(-1,screen)
     tiles = [tile]*17 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2 + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] * 17
     room = Room(tiles)
+
     room2 = Room(tiles)
-    tiles_2 = [tile]*17 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2
+    tiles = [tile]*17 + [0]*14 + [tile]*2 + [0]*14 + [tile]*19
+
     screen.fill((40, 40, 50))
     while True:
         clock.tick(60)
