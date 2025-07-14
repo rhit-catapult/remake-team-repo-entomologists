@@ -1,56 +1,78 @@
 import pygame
-pygame.init()
-class Solid(pygame.sprite.Sprite):
-    def __init__ (self, image, x, y, spritesheet):
-        pygame.sprite.Sprite.__init__(self)
-        self.image = spritesheet.parse_sprite(image)
-        self.rect = self.image.get_rect()
-        self.rect.x, self.rect.y = x, y
-        self.spritesheet = spritesheet
-    def collide(self, player):
-        if player.rect.colliderect(self.rect):
-            print("yay")
-    def draw(self, screen):
-        screen.blit(self.image, (self.rect.x, self.rect.y))
-class Tilemap():
-    def __init__ (self, filename, spritesheet):
-        self.spritesheet = spritesheet
-        self.tile_size = 32
-        self.start_x, self.start_y = 0, 0
-        self.tiles = self.load_tiles(filename)
-        self.map_surface = pygame.Surface(self.map_w, self.map_h)
-        self.map_surface.set_colorkey((0, 0, 0))
-        self.load_map()
-    def draw_map(self, surface):
-        surface.blit(self.map_surface, (0, 0))
-    def load_map(self, filename):
-        for tile in self.tiles:
-            tile.draw(self.map_surface)
-    def read_cvs (self, filename):
-        map = []
-        with open(os.path.join(filename)) as data:
-            data = cvs.reader(data, delimiter=',')
-            for row in data:
-                map.append(list(row))
-        return map
-    def load_tiles(self, filename):
-        tiles = []
-        map = self.read_cvs(filename)
-        x, y = 0, 0
-        for row in map:
-            x = 0
-            for tile in row:
-                if tile == 0:
-                    self.start_x, self.start_y = x*self.tile_size, y*self.tile_size
-                elif tile == 131:
-                    tiles.append('Placeholder.svg', x * self.tile_size, y * self.tile_size, self.spritesheet)
-                elif tile == 736:
-                    tiles.append('Grass.png', x * self.tile_size, y * self.tile_size, self.spritesheet)
+import sys
+import math
 
-                x += 1
-            y += 1
-        self.map_w, self.map_h = x * self.tile_size,y * self.tile_size
-        return tiles
+from pygame import K_SPACE
+
+
+class Tile:
+    def __init__(self, type, screen):
+        self.type = type
+        self.width = 64
+        self.height = 64
+        self.surface = pygame.Surface((self.width,self.height))
+        self.screen = screen
+
+        if type == 0:
+            self.surface.fill((70,70,95))
+
+    def draw(self, x, y):
+        if self.type != -1:
+            self.screen.blit(self.surface,(x, y))
+
+
+class Room:
+    def __init__(self,tiles):
+        self.tiles = tiles
+        self.rect_tiles = []
+
+        for i in range(len(self.tiles)):
+            if self.tiles[i] != 0:
+                rect = pygame.Rect(64 * (i % 16), 64 * math.floor(i / 16), self.tiles[i].width, self.tiles[i].height)
+                self.rect_tiles.append(rect)
+
+    def draw(self):
+        for i in range(len(self.tiles)):
+            if self.tiles[i] != 0:
+                rect = pygame.Rect(64 * (i % 16), 64 * math.floor(i / 16), self.tiles[i].width, self.tiles[i].height)
+                self.tiles[i].draw(rect.x, rect.y)
 
 
 
+def test_level():
+    pygame.init()
+    pygame.display.set_caption('platformer test')
+    screen = pygame.display.set_mode((1024, 576))
+    clock = pygame.time.Clock()
+    tile = Tile(0,screen)
+    tile2 = Tile(-1,screen)
+    tiles = [tile]*17 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2 + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] * 17
+    room = Room(tiles)
+
+    room2 = Room(tiles)
+    tiles = [tile]*17 + [0]*14 + [tile]*2 + [0]*14 + [tile]*19
+
+    screen.fill((40, 40, 50))
+    while True:
+        clock.tick(60)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                sys.exit()
+
+        if pygame.key.get_pressed()[K_SPACE]:
+            room2.draw()
+        else:
+            room.draw()
+
+        pygame.display.update()
+
+
+
+
+
+
+        (pygame.display.update())
+
+if __name__ == "__main__":
+    test_level()
