@@ -31,7 +31,7 @@ class Bullet:
     def move(self):
         self.x += self.speed_x
         self.y += self.speed_y
-        
+
     def collision(self,rectangles):
         for rectangle in rectangles:
             if pygame.Rect.colliderect(self.hitbox, rectangle):
@@ -83,7 +83,7 @@ def debug():
         pygame.draw.rect(screen,(255,0,0),test_rect)
         bullet_update(bullets,rectangles)
         pygame.display.update()
-debug()
+
 
 
 
