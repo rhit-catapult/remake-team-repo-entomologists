@@ -20,9 +20,14 @@ class Tile:
 class Room:
     def __init__(self,tiles):
         self.tiles = tiles
+        self.rect_tiles = []
     def draw(self):
         for i in range(len(self.tiles)):
-            self.tiles[i].draw(64 * (i % 16), 64 * math.floor(i / 16))
+            if self.tiles[i] != 0:
+                rect = pygame.Rect(64 * (i % 16), 64 * math.floor(i / 16), self.tiles[i].width, self.tiles[i].height)
+                self.tiles[i].draw(rect.x, rect.y)
+
+                self.rect_tiles.append(rect)
 
 
 def test_level():
@@ -32,8 +37,9 @@ def test_level():
     clock = pygame.time.Clock()
     tile = Tile(0,screen)
     tile2 = Tile(-1,screen)
-    tiles = [tile]*17 + [tile2]*14 + [tile]*2 + [tile2]*14 + [tile]*2 + [tile2]*14 + [tile]*2 + [tile2]*15 + [tile] + [tile2]*15 + [tile] + [tile2]*15 + [tile] + [tile2]*15 + [tile] * 17
+    tiles = [tile]*17 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2 + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] * 17
     room = Room(tiles)
+    room2 = Room(tiles)
     screen.fill((40, 40, 50))
     while True:
         clock.tick(60)
@@ -43,7 +49,9 @@ def test_level():
                 sys.exit()
         room.draw()
 
-        pygame.display.update()
+
+
+        (pygame.display.update())
 
 if __name__ == "__main__":
     test_level()
