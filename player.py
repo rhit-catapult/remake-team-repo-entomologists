@@ -1,30 +1,42 @@
 import pygame
 import sys
-from os import listdir
-from os.path import isfile, join
+# from os import listdir
+# from os.path import isfile, join
 
-def flip(sprites):
-    return [pygame.transform.flip(sprites, True, False) for _ in sprites]
 
-def load_sprite_sheets(dir1, dir2, width, height, direction=False):
-    path = join("assets", dir1, dir2)
-    images = [f for f in listdir(path) if isfile(join(path, f))]
 
-    all_sprites = {}
+# def flip(sprites):
+#     return [pygame.transform.flip(sprites, True, False) for _ in sprites]
 
-    for image in images:
-        sprite_sheet = pygame.image.load(join(path, image)).convert_alpha()
+# def load_sprite_sheets(dir1, dir2, width, height, direction=False):
+#     path = join("assets", dir1, dir2)
+#     images = [f for f in listdir(path) if isfile(join(path, f))]
+#
+#     all_sprites = {}
+#
+#     for image in images:
+#         sprite_sheet = pygame.image.load(join(path, image)).convert_alpha()
+#
+#         sprites = []
+#
+#         for i in range(sprite_sheet.get_width() // width):
+#             surface = pygame.Surface((width, height), pygame.SRCALPHA, 32)
+#             rect = pygame.Rect(i * width, 0, width, height)
+#             surface.blit(sprite_sheet, (0, 0), rect)
+#             sprites.append(pygame.transform.scale2x(surface))
+#
+#         if direction:
+#             all_sprites[image.replace(".png", "") + "_right"] = sprites
+#             all_sprites[image.replace(".png", "") + "_left"] = flip(sprites)
+#         else:
+#             all_sprites[image.replace(".png", "")] = sprites
+#
+#     return all_sprites
 
-        sprites = []
-
-        for i in range(sprite_sheet.get_width() // width):
-            surface = pygame.Surface((width, height), pygame.SRCALPHA, 32)
-            rect = pygame.Rect(i * width, 0, width, height)
-            surface.blit(sprite_sheet, (0, 0), rect)
-            sprites.append(pygame.transform.scale2x(surface))
 
 class Player(pygame.sprite.Sprite):
     GRAVITY = 1
+    PLAYER_COLOR = pygame.Color("blue")
 
     def __init__(self, x, y, width, height):
         self.rect = pygame.Rect(x, y, width, height)
@@ -34,6 +46,8 @@ class Player(pygame.sprite.Sprite):
         self.direction = "left"
         self.animation_count = 0
         self.fall_count = 0
+        self.jump_count = 0
+        self.surface = None
 
     def move(self, dx, dy):
         self.rect.x += dx
@@ -51,24 +65,73 @@ class Player(pygame.sprite.Sprite):
             self.direction = "right"
             self.animation_count = 0
 
+    def jump(self):
+        self.y_vel = -self.GRAVITY * 8
+        self.jump_count += 1
+
+        if self.jump_count == 1:
+            self.fall_count = 0
+
     def loop(self, fps):
         self.y_vel += min(1, (self.fall_count / fps) * self.GRAVITY)
         self.move(self.x_vel, self.y_vel)
 
         self.fall_count += 1
 
+    def landed(self):
+        self.fall_count = 0
+        self.y_vel = 0
+        self.jump_count = 0
+
+    def hit_head(self):
+        self.y_vel *= -1
+
     def draw(self, screen):
-        pygame.draw.rect(screen, "blue", self.rect)
+        self.surface = pygame.Surface((self.rect.width, self.rect.height))
+        self.surface.fill(self.PLAYER_COLOR)
+        screen.blit(self.surface, (self.rect.x, self.rect.y))
 
 
-def handle_move(player):
+def handle_move(player, objects):
     keys = pygame.key.get_pressed()
 
+    col_left = collide(player, objects, -5)
+    col_right = collide(player, objects, 5)
+
     player.x_vel = 0
-    if keys[pygame.K_LEFT]:
+    if keys[pygame.K_LEFT] and not col_left:
         player.move_left(5)
-    if keys[pygame.K_RIGHT]:
+    if keys[pygame.K_RIGHT] and not col_right:
         player.move_right(5)
+
+    handle_vertical(player, objects, player.y_vel)
+
+def handle_vertical(player, objects, dy):
+    collisions = []
+    for rect in objects:
+        if pygame.Rect.colliderect(player.rect, rect):
+            if dy > 0:
+                player.rect.bottom = rect.top
+                player.landed()
+            elif dy < 0:
+                player.rect.top = rect.bottom
+                player.hit_head()
+
+        collisions.append(rect)
+
+    return collisions
+
+def collide(player, objects, dx):
+    player.move(dx, 0)
+
+    collision = None
+
+    for rect in objects:
+        if pygame.Rect.colliderect(player.rect, rect):
+            collision = rect
+
+    player.move(-dx, 0)
+    return collision
 
 # This function is called when you run this file, and is used to test the Character class individually.
 # When you create more files with different classes, copy the code below, then
@@ -79,7 +142,7 @@ def test_player():
     screen = pygame.display.set_mode((640, 480))
     clock = pygame.time.Clock()
 
-    player = Player(100, 100, 50, 50)
+    player = Player(100, 100, 32, 32)
     while True:
         clock.tick(60)
 
@@ -87,11 +150,20 @@ def test_player():
             if event.type == pygame.QUIT:
                 sys.exit()
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP and player.jump_count < 2:
+                    player.jump()
+
         screen.fill("grey")
 
         player.loop(60)
 
-        handle_move(player)
+        rect = [pygame.Rect(50, 450, 200, 50), pygame.Rect(250, 400, 200, 100)]
+
+        for r in rect:
+            pygame.draw.rect(screen, "red", r)
+
+        handle_move(player, rect)
         player.draw(screen)
         pygame.display.update()
 

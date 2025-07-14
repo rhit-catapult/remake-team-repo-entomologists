@@ -9,6 +9,7 @@ class Bullet:
         #Unsure if collision is necessary to create upon initialization.
         self.x = x
         self.y = y
+        self.origin_x = x
         self.speed_x = speed_x
         self.speed_y = speed_y
 
@@ -17,7 +18,7 @@ class Bullet:
         if self.image == 'placeholder':
             pygame.draw.line(self.screen,(255,100,100),(self.x,self.y),(self.x+25,self.y),5)
         else:
-            self.screen.blit(self.image,(self.x, self.y))
+            self.screen.blit(pygame.image.load(self.image),(self.x, self.y))
             hitbox = pygame.image.load(self.image).get_rect()
 
     def move(self):
@@ -25,7 +26,16 @@ class Bullet:
         self.y += self.speed_y
 
 
+def bullet_update(bullets):
+    for bullet in bullets:
+        bullet.move()
+        bullet.draw()
+        if bullet.x > bullet.origin_x + 1000:
+            print("pew")
+            bullets.remove(bullet)
+            del bullet
 
+        
 def debug():
     pygame.init()
     clock = pygame.time.Clock()
@@ -33,7 +43,12 @@ def debug():
     pygame.display.init()
     pygame.display.set_caption('Bullet Debug')
     screen = pygame.display.set_mode((800,600))
-    test_bullet = Bullet(screen)
+    test_bullet = Bullet(screen,'Pistol.png')
+    test_bullet2 = Bullet(screen,'placeholder',100,75,6)
+    bullets = []
+    bullets.append(test_bullet)
+    bullets.append(test_bullet2)
+
     screen.fill((255,255,255))
     while True:
         clock.tick(60)
@@ -41,8 +56,7 @@ def debug():
             if event.type == pygame.QUIT:
                 sys.exit()
         screen.fill((255,255,255))
-        test_bullet.move()
-        test_bullet.draw()
+        bullet_update(bullets)
         pygame.display.update()
 debug()
 
