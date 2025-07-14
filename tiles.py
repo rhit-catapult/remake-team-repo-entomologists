@@ -1,6 +1,10 @@
 import pygame
 import sys
 import math
+
+from pygame import K_SPACE
+
+
 class Tile:
     def __init__(self, type, screen):
         self.type = type
@@ -21,13 +25,18 @@ class Room:
     def __init__(self,tiles):
         self.tiles = tiles
         self.rect_tiles = []
+
+        for i in range(len(self.tiles)):
+            if self.tiles[i] != 0:
+                rect = pygame.Rect(64 * (i % 16), 64 * math.floor(i / 16), self.tiles[i].width, self.tiles[i].height)
+                self.rect_tiles.append(rect)
+
     def draw(self):
         for i in range(len(self.tiles)):
             if self.tiles[i] != 0:
                 rect = pygame.Rect(64 * (i % 16), 64 * math.floor(i / 16), self.tiles[i].width, self.tiles[i].height)
                 self.tiles[i].draw(rect.x, rect.y)
 
-                self.rect_tiles.append(rect)
 
 
 def test_level():
@@ -40,6 +49,7 @@ def test_level():
     tiles = [tile]*17 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2 + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] * 17
     room = Room(tiles)
     room2 = Room(tiles)
+    tiles_2 = [tile]*17 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2
     screen.fill((40, 40, 50))
     while True:
         clock.tick(60)
@@ -47,7 +57,16 @@ def test_level():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-        room.draw()
+
+        if pygame.key.get_pressed()[K_SPACE]:
+            room2.draw()
+        else:
+            room.draw()
+
+        pygame.display.update()
+
+
+
 
 
 
