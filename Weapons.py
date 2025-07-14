@@ -62,10 +62,9 @@ def main():
 
         pygame.draw.circle(screen, (255, 0, 0), mouse_pos, 5)
 
-        if event.type == pygame.MOUSEBUTTONUP:
-            gun.shoot(mouse_pos[0], mouse_pos[1])
-        #bullet.draw()
-        #bullet.move()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            print("BANG")
+            #gun.shoot(mouse_pos[0], mouse_pos[1])
 
         pygame.display.update()
 
