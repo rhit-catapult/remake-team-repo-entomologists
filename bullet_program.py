@@ -24,7 +24,9 @@ class Bullet:
             self.screen.blit(pygame.image.load(self.image),(self.x, self.y))
 
             self.hitbox = (pygame.image.load(self.image)).get_rect()
-            self.hitbox.move(self.speed_x,self.speed_y)
+            #self.hitbox = self.hitbox.get_rect()
+            self.hitbox.move_ip(self.x,self.y)
+            print(self.hitbox)
 
     def move(self):
         self.x += self.speed_x
@@ -63,7 +65,8 @@ def debug():
     screen = pygame.display.set_mode((800,600))
     test_bullet = Bullet(screen,'Pistol.png')
     test_bullet2 = Bullet(screen,'placeholder',100,75,6)
-    test_rect = pygame.rect.Rect(400,0,300,600)
+
+    test_rect = pygame.rect.Rect(600,0,100,600)
     rectangles = []
     rectangles.append(test_rect)
     bullets = []
@@ -77,10 +80,10 @@ def debug():
             if event.type == pygame.QUIT:
                 sys.exit()
         screen.fill((255,255,255))
-
+        pygame.draw.rect(screen,(255,0,0),test_rect)
         bullet_update(bullets,rectangles)
         pygame.display.update()
-debug()
+
 
 
 
