@@ -43,8 +43,6 @@ class Gun:
                                        image,
                                        self.bullet_damage)
         self.bullets.append(bullet)
-        print(angle)
-        print(bullet_speed_x, bullet_speed_y)
 
     def bullet_run(self):
         for bullet in self.bullets:
@@ -64,7 +62,6 @@ def main():
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                print("BANG")
                 gun.shoot(mouse_pos[0], mouse_pos[1])
             if event.type == pygame.QUIT:
                 sys.exit()
