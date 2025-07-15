@@ -12,11 +12,11 @@ class Tile:
         self.height = 64
         self.surface = pygame.Surface((self.width,self.height))
         self.screen = screen
-
         if type == 0:
-            self.surface.fill((70,70,95))
+            self.surface.blit(pygame.image.load('Back_Ground_Bricks.png'), (0, 0))
         if type == 1:
-            self.surface.fill((140,70,70))
+            self.surface.fill((140,40,40))
+
     def draw(self, x, y):
         if self.type != -1:
             self.screen.blit(self.surface,(x, y))
@@ -62,7 +62,7 @@ def test_level():
     clock = pygame.time.Clock()
     tile = Tile(0,screen)
     tile2 = Tile(1,screen)
-    tiles = [tile]*17 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2 + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] * 17
+    tiles = [tile]*17 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2 + [0]*14 + [tile2]*2 + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] * 17
     room = [Room(tiles, 0, 0)]
 
     level = Level(room)
