@@ -30,5 +30,5 @@ class Walker:
         if pygame.Rect.colliderect(player, self):
             player.health = player.health - enemy_damage
     def get_hurt(self):
-        if pygame.Rect.colliderect(self, bullet):
+        if pygame.Rect.colliderect(self):
             self.health = self.health - bullet_damage
