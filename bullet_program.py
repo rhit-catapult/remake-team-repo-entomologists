@@ -1,9 +1,7 @@
 import pygame
 import sys
 import os
-pygame.init()
-pygame.mixer.init()
-pew = pygame.mixer.Sound('pewpew.wav')
+
 class Bullet:
     #origin is a tuple that contains coordinates (x,y)
     def __init__(self,screen,x=100,y=200,speed_x=6,speed_y=0,image = 'placeholder'):
@@ -17,7 +15,8 @@ class Bullet:
         self.speed_y = speed_y
         # hitbox is here for init
         self.hitbox = pygame.Rect(0,0,0,0)
-        pygame.mixer.Sound.play(pew)
+        self.pew = pygame.mixer.Sound('pewpew.wav')
+        pygame.mixer.Sound.play(self.pew)
 
 
     def draw(self):
@@ -89,7 +88,8 @@ def debug():
         bullet_update(bullets,rectangles)
         pygame.display.update()
 
-debug()
+if __name__ == "__main__":
+    debug()
 
 
 
