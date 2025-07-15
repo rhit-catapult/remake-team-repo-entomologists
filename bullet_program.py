@@ -90,7 +90,6 @@ def debug():
         bullet_update(bullets,rectangles)
         pygame.display.update()
 
-debug()
 
 
 
