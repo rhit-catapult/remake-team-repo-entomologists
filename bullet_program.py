@@ -20,17 +20,15 @@ class Bullet:
         pygame.mixer.Sound.play(self.pew)
 
 
-    def draw(self):
+    def draw(self, x_offset, y_offset):
         if self.image == 'placeholder':
             pygame.draw.line(self.screen,(255,100,100),(self.x,self.y),(self.x+25,self.y),5)
             self.hitbox = pygame.Rect(self.x,self.y,25,5)
 
         else:
-            self.screen.blit(pygame.transform.scale(pygame.image.load(self.image),(7,7)),(self.x, self.y))
+            self.screen.blit(pygame.transform.scale(pygame.image.load(self.image),(7,7)), (self.x - x_offset, self.y - y_offset))
 
-            self.hitbox = (pygame.image.load(self.image)).get_rect()
-
-            self.hitbox.move_ip(self.x,self.y)
+            self.hitbox = pygame.Rect(self.x,self.y,5,5)
 
 
     def move(self):
@@ -41,25 +39,8 @@ class Bullet:
         for rectangle in rectangles:
             if pygame.Rect.colliderect(self.hitbox, rectangle):
                 return True
-        else:
-            return False
 
-def bullet_update(bullets,rectangles):
-    for bullet in bullets:
-        remove_bullet = False
-        bullet.move()
-        bullet.draw()
-        if bullet.collision(rectangles):
-            remove_bullet = True
-
-
-        if bullet.x > bullet.origin_x + 1000:
-
-            remove_bullet = True
-        if remove_bullet:
-            bullets.remove(bullet)
-            del bullet
-
+        return False
 
 def debug():
     pygame.init()
@@ -86,7 +67,6 @@ def debug():
                 sys.exit()
         screen.fill((255,255,255))
         pygame.draw.rect(screen,(255,0,0),test_rect)
-        bullet_update(bullets,rectangles)
         pygame.display.update()
 
 
