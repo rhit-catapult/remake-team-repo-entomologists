@@ -8,8 +8,6 @@ import bullet_program
 class Gun:
     def __init__(self, screen, x, y, image, bullet_speed, bullet_damage):
         self.screen = screen
-        self.pos_x = x
-        self.pos_y = y
         self.x = x
         self.y = y
         self.image = pygame.image.load(image)
