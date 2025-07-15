@@ -17,6 +17,7 @@ class Player:
         self.jump_count = 0
         self.surface = pygame.Surface((self.rect.width, self.rect.height))
         self.surface.fill(self.PLAYER_COLOR)
+        self.player_health = 500
 
     def move(self, dx, dy):
         self.rect.x += dx
@@ -56,8 +57,8 @@ class Player:
     def hit_head(self):
         self.y_vel *= -1
 
-    def draw(self, screen):
-        screen.blit(self.surface, (self.rect.x, self.rect.y))
+    def draw(self, screen, x_offset, y_offset):
+        screen.blit(self.surface, (self.rect.x - x_offset, self.rect.y + y_offset))
 
 
 def handle_move(player, objects):
