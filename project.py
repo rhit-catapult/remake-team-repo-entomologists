@@ -3,6 +3,7 @@ import sys
 import player as p
 import tiles as level
 import math
+import Weapons as weapons
 
 SCREENWIDTH = 1024
 SCREENHEIGHT = 576
@@ -44,6 +45,7 @@ def main():
     clock = pygame.time.Clock()
 
     player = p.Player(100, 100, 32, 32)
+    gun = weapons.Gun(screen, 0, 0, "Pistol.png", 20, 100)
 
     tile = level.Tile(0,screen)
     tiles1 = [tile]*17 + [0]*14 + [tile]*2 + [0]*14 + [tile]*4 + [0]*12 + [tile]*2 + [0]*15 + [tile] + [0]*4 + [tile]*3+ [0]*8 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] * 17
@@ -62,6 +64,8 @@ def main():
 
         screen.fill((40, 40, 50))
 
+        mouse_pos = pygame.mouse.get_pos()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -70,13 +74,22 @@ def main():
                 if event.key == pygame.K_UP and player.jump_count < 2:
                     player.jump()
 
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                gun.shoot(mouse_pos[0], mouse_pos[1])
+
         player.loop(60)
         x_offset, y_offset, target_x, target_y = apply_offset(screen, player, l, x_offset, y_offset, target_x, target_y)
         p.handle_move(player, l.rect_tiles)
-        pygame.display.update()
 
+        gun.update_offset(target_x, target_y)
 
-        # don't forget the update, otherwise nothing will show up!
+        gun.x = player.rect.x - target_x + player.rect.width / 2
+        gun.y = player.rect.y - target_y + player.rect.height / 2
+
+        gun.bullet_run(l.rect_tiles)
+
+        gun.draw(mouse_pos[0], mouse_pos[1])
+
         pygame.display.update()
 
 main()

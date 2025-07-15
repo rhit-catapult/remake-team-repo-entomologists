@@ -16,8 +16,15 @@ class Gun:
         self.bullet_damage = bullet_damage
         self.bullets = []
         self.image_rect = self.image.get_rect(center=(self.x, self.y))
+        self.offset_x = 0
+        self.offset_y = 0
+
+    def update_offset(self, x, y):
+        self.offset_x = x
+        self.offset_y = y
 
     def draw(self, mouse_pos_x, mouse_pos_y):#draws the gun and calculats which way it should face and what it's angle should be
+        self.image_rect = self.image.get_rect(center=(self.x, self.y))
         drawn_image = self.image
         if mouse_pos_x > self.x:
             drawn_image = self.image_flipped
@@ -36,19 +43,20 @@ class Gun:
         bullet_speed_x = self.bullet_speed * math.cos(angle)
         bullet_speed_y = -1 * self.bullet_speed * math.sin(angle)
         bullet = bullet_program.Bullet(self.screen,
-                                       self.image_rect.center[0],
-                                       self.image_rect.center[1],
+                                       self.x + self.offset_x,
+                                       self.y + self.offset_y,
                                        bullet_speed_x,
                                        bullet_speed_y,
                                        image,
                                        self.bullet_damage)
         self.bullets.append(bullet)
 
-    def bullet_run(self):
+    def bullet_run(self, rects):
         for bullet in self.bullets:
-            bullet.draw()
             bullet.move()
-            #bullet.collision()
+            bullet.draw(self.offset_x, self.offset_y)
+            if bullet.collision(rects):
+                self.bullets.remove(bullet)
 
 
 def main():
@@ -80,4 +88,4 @@ def main():
 
         pygame.display.update()
 
-main()
+# main()
