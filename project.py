@@ -13,8 +13,9 @@ def main():
     player = p.Player(100, 100, 32, 32)
 
     tile = level.Tile(0,screen)
-    tiles = [tile]*17 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2 + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] * 17
+    tiles = [tile]*17 + [0]*14 + [tile]*2 + [0]*14 + [tile]*4 + [0]*12 + [tile]*2 + [0]*15 + [tile] + [0]*4 + [tile]*3+ [0]*8 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] * 17
     room = level.Room(tiles)
+
     while True:
         clock.tick(60)
 
@@ -38,6 +39,5 @@ def main():
 
         # don't forget the update, otherwise nothing will show up!
         pygame.display.update()
-
 
 main()
