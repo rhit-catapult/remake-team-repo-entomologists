@@ -1,34 +1,46 @@
 import pygame
-import sys
-
-import player
-import tiles
-pygame.init()
-bullet_damage = 100
-enemy_damage = 50
 
 class Walker:
-
-    def __init__(self, x, y):
+    def __init__(self, x, y, min_x, max_x, speed, size):
         self.x = x
         self.y = y
-        self.speedx = 15
-        self.health = 500
+        self.min_x = min_x
+        self.max_x = max_x
+        self.speedx = speed
+        self.health = 5
+        self.hitbox = pygame.Rect(self.x, self.y, size, size)
     def draw(self, screen):
-        if self.health <= 0:
-            return False
-        if True:
-            pygame.draw.rect(screen, (255, 0, 0), (self.x, self.y, 32, 32))
-        if False:
-            pass
+        pygame.draw.rect(screen, (255, 0, 0), self.hitbox)
+
     def move(self):
-        self.x = self.x + self.speedx
-    def collide(self, tile):
-        if pygame.Rect.colliderect(tile, self):
-            self.speedx = -self.speedx
-    def hurt(self, player):
-        if pygame.Rect.colliderect(player, self):
-            player.health = player.health - enemy_damage
-    def get_hurt(self):
-        if pygame.Rect.colliderect(self):
-            self.health = self.health - bullet_damage
+        self.x += self.speedx
+
+        if self.min_x > self.x > self.max_x:
+            self.speedx *= -1
+
+    def update_hit(self, bullets):
+        for bullet in bullets:
+            if pygame.Rect.colliderect(bullet.rect, self.hitbox):
+                self.health -= 1
+                return bullet
+
+        return None
+
+class Enemies:
+    def __init__(self, screen, enemies):
+        self.screen = screen
+        self.enemies = enemies
+
+    def enemies_update(self, bullets):
+        for enemy in self.enemies:
+            enemy.draw(self.screen)
+            enemy.move()
+            hit = enemy.update_hit(bullets)
+
+            if enemy.health <= 0:
+                self.enemies.remove(enemy)
+
+            if hit is not None:
+                return hit
+
+        return None
