@@ -22,20 +22,35 @@ class Tile:
 
 
 class Room:
-    def __init__(self,tiles):
+    def __init__(self,tiles, x, y):
         self.tiles = tiles
+        self.x = x
+        self.y = y
         self.rect_tiles = []
 
         for i in range(len(self.tiles)):
             if self.tiles[i] != 0:
-                rect = pygame.Rect(64 * (i % 16), 64 * math.floor(i / 16), self.tiles[i].width, self.tiles[i].height)
+                rect = pygame.Rect(64 * (i % 16) + self.x * 1024, 64 * math.floor(i / 16) + self.y * 576, self.tiles[i].width, self.tiles[i].height)
                 self.rect_tiles.append(rect)
 
-    def draw(self):
+    def draw(self, x_offset, y_offset):
         for i in range(len(self.tiles)):
             if self.tiles[i] != 0:
-                rect = pygame.Rect(64 * (i % 16), 64 * math.floor(i / 16), self.tiles[i].width, self.tiles[i].height)
+                rect = pygame.Rect(64 * (i % 16) + self.x * 1024 - x_offset, 64 * math.floor(i / 16) + self.y * 576 - y_offset, self.tiles[i].width, self.tiles[i].height)
                 self.tiles[i].draw(rect.x, rect.y)
+
+class Level:
+    def __init__(self, rooms):
+        self.rooms = rooms
+        self.rect_tiles = []
+
+        for room in rooms:
+            for tile in room.rect_tiles:
+                self.rect_tiles.append(tile)
+
+    def draw(self, x_offset, y_offset):
+        for room in self.rooms:
+            room.draw(x_offset, -y_offset)
 
 
 
@@ -47,10 +62,10 @@ def test_level():
     tile = Tile(0,screen)
     tile2 = Tile(-1,screen)
     tiles = [tile]*17 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2 + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] * 17
-    room = Room(tiles)
+    room = [Room(tiles, 0, 0)]
 
-    room2 = Room(tiles)
-    tiles = [tile]*17 + [0]*14 + [tile]*2 + [0]*14 + [tile]*19
+    level = Level(room)
+
 
     screen.fill((40, 40, 50))
     while True:
@@ -60,10 +75,7 @@ def test_level():
             if event.type == pygame.QUIT:
                 sys.exit()
 
-        if pygame.key.get_pressed()[K_SPACE]:
-            room2.draw()
-        else:
-            room.draw()
+        level.draw(200, 40)
 
         pygame.display.update()
 
