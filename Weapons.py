@@ -49,6 +49,9 @@ def main():
     while True:
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                print("BANG")
+                #gun.shoot(mouse_pos[0], mouse_pos[1])
             if event.type == pygame.QUIT:
                 sys.exit()
 
@@ -61,10 +64,6 @@ def main():
         mouse_pos = pygame.mouse.get_pos()
 
         pygame.draw.circle(screen, (255, 0, 0), mouse_pos, 5)
-
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            print("BANG")
-            #gun.shoot(mouse_pos[0], mouse_pos[1])
 
         pygame.display.update()
 
