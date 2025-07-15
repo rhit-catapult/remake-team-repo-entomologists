@@ -6,7 +6,7 @@ pygame.mixer.init()
 pew = pygame.mixer.Sound('pewpew.wav')
 class Bullet:
     #origin is a tuple that contains coordinates (x,y)
-    def __init__(self,screen,x=100,y=200,speed_x=6,speed_y=0,image = 'placeholder'):
+    def __init__(self,screen,x=100,y=200,speed_x=6,speed_y=0,image = 'placeholder',damage=10):
         self.screen = screen
         self.image = image
         #Unsure if collision is necessary to create upon initialization.
@@ -18,6 +18,7 @@ class Bullet:
         # hitbox is here for init
         self.hitbox = pygame.Rect(0,0,0,0)
         pygame.mixer.Sound.play(pew)
+        self.damage = damage
 
 
     def draw(self):
