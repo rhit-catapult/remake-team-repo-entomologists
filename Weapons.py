@@ -49,7 +49,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 print("BANG")
-                #gun.shoot(mouse_pos[0], mouse_pos[1])
+                gun.shoot(mouse_pos[0], mouse_pos[1])
             if event.type == pygame.QUIT:
                 sys.exit()
 
