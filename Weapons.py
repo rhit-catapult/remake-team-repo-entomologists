@@ -29,13 +29,27 @@ class Gun:
         self.screen.blit(drawn_image, self.image_rect)
 
     def shoot(self, mouse_pos_x, mouse_pos_y):
+        image = 'Blue_Bullet.png'
         dx = mouse_pos_x - self.image_rect.centerx
         dy = mouse_pos_y - self.image_rect.centery
-        angle = math.degrees(math.atan2(-dy, dx))
-        bullet_speed_x = math.cos(angle)*mouse_pos_x - self.image_rect.center[0] * self.bullet_speed
-        bullet_speed_y = math.sin(angle)*mouse_pos_y - self.image_rect.center[1] * self.bullet_speed
-        bullet = bullet_program.Bullet(self.screen, self.image_rect.center[0], self.image_rect.center[1], bullet_speed_x, bullet_speed_y)
+        angle = math.atan2(-dy, dx)
+        bullet_speed_x = self.bullet_speed * math.cos(angle)
+        bullet_speed_y = -1 * self.bullet_speed * math.sin(angle)
+        bullet = bullet_program.Bullet(self.screen,
+                                       self.image_rect.center[0],
+                                       self.image_rect.center[1],
+                                       bullet_speed_x,
+                                       bullet_speed_y,
+                                       image,
+                                       self.bullet_damage)
         self.bullets.append(bullet)
+
+    def bullet_run(self):
+        for bullet in self.bullets:
+            bullet.draw()
+            bullet.move()
+            #bullet.collision()
+
 
 def main():
     pygame.init()
@@ -48,7 +62,6 @@ def main():
         screen.fill((0, 0, 0))
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
-                print("BANG")
                 gun.shoot(mouse_pos[0], mouse_pos[1])
             if event.type == pygame.QUIT:
                 sys.exit()
@@ -57,11 +70,13 @@ def main():
 
         gun.draw(mouse_pos[0], mouse_pos[1])
 
-        pygame.draw.circle(screen, (255, 0, 0), (gun.image_rect.center),5)
+        gun.bullet_run()
+
+        #pygame.draw.circle(screen, (255, 0, 0), (gun.image_rect.center),5)
 
         mouse_pos = pygame.mouse.get_pos()
 
-        pygame.draw.circle(screen, (255, 0, 0), mouse_pos, 5)
+        #pygame.draw.circle(screen, (255, 0, 0), mouse_pos, 5)
 
         pygame.display.update()
 

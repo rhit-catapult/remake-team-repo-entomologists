@@ -26,7 +26,7 @@ class Bullet:
             self.hitbox = pygame.Rect(self.x,self.y,25,5)
 
         else:
-            self.screen.blit(pygame.image.load(self.image),(self.x, self.y))
+            self.screen.blit(pygame.transform.scale(pygame.image.load(self.image),(7,7)),(self.x, self.y))
 
             self.hitbox = (pygame.image.load(self.image)).get_rect()
 

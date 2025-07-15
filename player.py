@@ -58,7 +58,7 @@ class Player:
         self.y_vel *= -1
 
     def draw(self, screen, x_offset, y_offset):
-        screen.blit(self.surface, (self.rect.x - x_offset, self.rect.y + y_offset))
+        screen.blit(self.surface, (self.rect.x - x_offset, self.rect.y - y_offset))
 
 
 def handle_move(player, objects):

@@ -36,7 +36,7 @@ class Room:
     def draw(self, x_offset, y_offset):
         for i in range(len(self.tiles)):
             if self.tiles[i] != 0:
-                rect = pygame.Rect(64 * (i % 16) + self.x * 1024 - x_offset, 64 * math.floor(i / 16) + self.y * 576 - y_offset, self.tiles[i].width, self.tiles[i].height)
+                rect = pygame.Rect(64 * (i % 16) + self.x * 1024 - x_offset, 64 * math.floor(i / 16) + self.y * 576 + y_offset, self.tiles[i].width, self.tiles[i].height)
                 self.tiles[i].draw(rect.x, rect.y)
 
 class Level:
