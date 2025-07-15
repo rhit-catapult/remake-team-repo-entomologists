@@ -68,9 +68,9 @@ def main():
 
         clock.tick(60)
 
-        gun.draw(mouse_pos[0], mouse_pos[1])
-
         gun.bullet_run()
+
+        gun.draw(mouse_pos[0], mouse_pos[1])
 
         #pygame.draw.circle(screen, (255, 0, 0), (gun.image_rect.center),5)
 
