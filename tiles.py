@@ -1,6 +1,7 @@
 import pygame
 import sys
 import math
+import player
 
 from pygame import K_SPACE
 
@@ -10,16 +11,24 @@ class Tile:
         self.type = type
         self.width = 64
         self.height = 64
+        self.y_offset = 0
         self.surface = pygame.Surface((self.width,self.height))
         self.screen = screen
         if type == 0:
             self.surface.blit(pygame.image.load('Back_Ground_Bricks.png'), (0, 0))
         if type == 1:
-            self.surface.fill((140,40,40))
+            self.height = 50
+            self.y_offset = 14
+            self.surface = pygame.Surface((self.width, self.height))
+            self.surface.fill((40,200,40))
 
     def draw(self, x, y):
         if self.type != -1:
-            self.screen.blit(self.surface,(x, y))
+            self.screen.blit(self.surface,(x, y + self.y_offset))
+   # def burn(self):
+   #     if self.type == 1 and pygame.Rect.colliderect(self.re):
+   #         player_health = 0
+   #         print("GAME OVER")
 
 
 class Room:
@@ -31,7 +40,7 @@ class Room:
 
         for i in range(len(self.tiles)):
             if self.tiles[i] != 0:
-                rect = pygame.Rect(64 * (i % 16) + self.x * 1024, 64 * math.floor(i / 16) + self.y * 576, self.tiles[i].width, self.tiles[i].height)
+                rect = pygame.Rect(64 * (i % 16) + self.x * 1024, 64 * math.floor(i / 16) + self.y * 576 + self.tiles[i].y_offset, self.tiles[i].width, self.tiles[i].height)
                 self.rect_tiles.append(rect)
 
     def draw(self, x_offset, y_offset):

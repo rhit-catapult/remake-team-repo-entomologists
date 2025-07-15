@@ -53,15 +53,17 @@ def main():
     screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
     clock = pygame.time.Clock()
 
-    player = p.Player(3100, -400, 32, 32)
+    player = p.Player(100, 100, 32, 32)
 
     tile = level.Tile(0,screen)
+    tile2 = level.Tile(1,screen)
     tiles1 = [tile]*17 + [0]*14 + [tile]*2 + [0]*14 + [tile]*4 + [0]*12 + [tile]*2 + [0]*15 + [tile] + [0]*4 + [tile]*3+ [0]*8 + [tile] + [0]*15 + [tile] + [0]*15 + [tile] * 17
     tiles2 = [tile]*17 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2 + [0]*14 + [tile] + [0]*15 + [tile] + [0]*16 + [0]*16 + [0]*16 + [tile]*16
     tiles3 = [tile]*13 + [0]*2 + [tile]*2 + [0]*14 + [tile]*2 + [0]*12 + [tile]*4 + [0]*14 + [tile]*2 + [0]*14 + [tile]*1 + [0]*7 + [tile]*2 + [0]*6 + [tile]*1 + [0]*15 + [tile]*1 + [0]*15 + [tile]*17
     tiles4 = [tile]*17 + [0]*15 + [tile] + [0]*15 + [tile]*1 + [0]*15 + [tile] + [0]*5 + [tile]*11 + [0]*14 + [tile]*5 + [0]*11 + [tile]*5 + [0]*11 + [tile]*14 + [0]*2+[tile]
-    tiles5 = [tile]*16 + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile]*11 + [0]*2 + [tile]*5 + [0]*14 + [tile]*2 + [0]*15 + [tile] + [0]*15 + [tile]*16
-    room = [level.Room(tiles1, 0, 0), level.Room(tiles2, 1, 0), level.Room(tiles3, 2, 0), level.Room(tiles4, 2, -1), level.Room(tiles5, 3, -1)]
+    tiles5 = [tile]*16 + [0]*15 + [tile] + [0]*15 + [tile] + [0]*15 + [tile]*12 + [0]*4 + [tile]*2 + [0]*13 + [tile]*3 + [0]*12 + [tile]*3 + [tile] + [0]*11 + [tile]*6 + [0]*2 + [tile]*12
+    tiles6 = [tile]*2 + [0]*2 + [tile]*13 + [0]*14 + [tile]*2 + [0]*14 + [tile]*2 + [0] + [tile]*2 + [0]*11 + [tile]*2 + [0]*5 + [tile]*2 +[0]*7 +[tile]*2 + [0]*14 + [tile]*2 + [0]*9 +[tile]*2 +[0]*4 +[tile] + [0]*15 + [tile] + [tile2]*12 + [tile]*3
+    room = [level.Room(tiles1, 0, 0), level.Room(tiles2, 1, 0), level.Room(tiles3, 2, 0), level.Room(tiles4, 2, -1), level.Room(tiles5, 3, -1), level.Room(tiles6, 3, 0)]
     l = level.Level(room)
 
     x_offset = 0
