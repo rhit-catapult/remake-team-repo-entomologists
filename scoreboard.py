@@ -13,8 +13,8 @@ class Scoreboard:
         self.font = pygame.font.SysFont('Times New Roman', 12)
 
     def draw(self):
-        text = pygame.font.Font.render(self.font, f'{self.score}', True, (200,255,200))
-        self.screen.blit(text, (100,50))
+        text = pygame.font.Font.render(self.font, f'Score: {self.score}', True, (200,255,200))
+        self.screen.blit(text, (25,10))
 
     def update(self,value):
         self.score += value
