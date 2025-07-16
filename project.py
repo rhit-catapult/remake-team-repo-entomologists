@@ -48,7 +48,7 @@ def main():
     player = p.Player(100, 100, 32, 32)
     gun = weapons.Gun(screen, 0, 0, "Pistol.png", 20, 100)
 
-    enemies = [enemy.Walker(300,480,200,400,2)]
+    enemies = [enemy.Walker(300,480,200,400,2, 32, True), enemy.Walker(300,480,200,400,0, 32, True)]
     enemy_handler = enemy.Enemies(screen, enemies)
 
     tile = level.Tile(0, screen)
@@ -125,9 +125,19 @@ def main():
 
         gun.draw(mouse_pos[0], mouse_pos[1])
 
-        hit = enemy_handler.enemies_update(gun.bullets)
+        hit = enemy_handler.enemies_update(gun.bullets, target_x, target_y, player.rect.centerx, player.rect.centery)
 
-        player.handle_death(enemies)
+        wall = enemy.bullet_hit_wall(l.rect_tiles, enemy_handler.shots)
+        if wall is not None:
+            enemy_handler.shots.remove(wall)
+
+        death_objects = enemies + l.death_tiles + enemy_handler.shots
+
+        objs = player.handle_death(death_objects)
+
+        for obj in objs:
+            if obj.__class__ == enemy.EnemyBullet:
+                enemy_handler.shots.remove(obj)
 
         if hit is not None:
             gun.bullets.remove(hit)

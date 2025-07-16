@@ -37,11 +37,16 @@ class Room:
         self.x = x
         self.y = y
         self.rect_tiles = []
+        self.death_tiles = []
 
         for i in range(len(self.tiles)):
             if self.tiles[i] != 0:
-                rect = pygame.Rect(64 * (i % 16) + self.x * 1024, 64 * math.floor(i / 16) + self.y * 576 + self.tiles[i].y_offset, self.tiles[i].width, self.tiles[i].height)
-                self.rect_tiles.append(rect)
+                if self.tiles[i].type == 1:
+                    rect = pygame.Rect(64 * (i % 16) + self.x * 1024, 64 * math.floor(i / 16) + self.y * 576 + self.tiles[i].y_offset, self.tiles[i].width, self.tiles[i].height)
+                    self.death_tiles.append(rect)
+                else:
+                    rect = pygame.Rect(64 * (i % 16) + self.x * 1024, 64 * math.floor(i / 16) + self.y * 576 + self.tiles[i].y_offset, self.tiles[i].width, self.tiles[i].height)
+                    self.rect_tiles.append(rect)
 
     def draw(self, x_offset, y_offset):
         for i in range(len(self.tiles)):
@@ -53,10 +58,13 @@ class Level:
     def __init__(self, rooms):
         self.rooms = rooms
         self.rect_tiles = []
+        self.death_tiles = []
 
         for room in rooms:
             for tile in room.rect_tiles:
                 self.rect_tiles.append(tile)
+            for tile in room.death_tiles:
+                self.death_tiles.append(tile)
 
     def draw(self, x_offset, y_offset):
         for room in self.rooms:

@@ -63,10 +63,16 @@ class Player:
     def handle_death(self, objects):
         obj = []
         for danger in objects:
-            if pygame.Rect.colliderect(danger.rect, self.rect):
-                obj.append(danger)
-                self.player_health -= 1
-                self.hit = 5
+            if danger.__class__ == pygame.Rect:
+                if pygame.Rect.colliderect(danger, self.rect):
+                    obj.append(danger)
+                    self.player_health -= 5
+                    self.hit = 5
+            else:
+                if pygame.Rect.colliderect(danger.rect, self.rect):
+                    obj.append(danger)
+                    self.player_health -= 1
+                    self.hit = 5
 
         if self.player_health < 1:
             self.player_health = 10
