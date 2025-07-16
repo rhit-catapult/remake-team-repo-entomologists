@@ -1,5 +1,4 @@
 import pygame
-import boss as b
 
 
 
@@ -9,6 +8,7 @@ import boss as b
 
 
 
+import enemy as e
 import sys
 import player as p
 import tiles as level
@@ -52,10 +52,10 @@ def main():
     screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
     clock = pygame.time.Clock()
 
-    Ethan_Faust = b.Boss(400, 200)
 
 
-    player = p.Player(400, 400, 32, 32)
+
+    player = p.Player(3500, -800, 32, 32)
 
     tile = level.Tile(0,screen)
     tile2 = level.Tile(1,screen)
@@ -78,6 +78,9 @@ def main():
     y_offset = 0
     target_x = 0
     target_y = 0
+
+
+
     pygame.mixer_music.load("Cave Music _) (1).wav")
     pygame.mixer_music.play(-1)
     while True:
@@ -85,7 +88,9 @@ def main():
 
         screen.fill((40, 40, 50))
 
-        b.Boss.draw(Ethan_Faust)
+        Ethan_Faust = e.Boss(3500, -1000, 3300, 3700, 35, size=200, shoot=False)
+        Ethan_Faust.draw(screen, x_offset, y_offset)
+        Ethan_Faust.move()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
