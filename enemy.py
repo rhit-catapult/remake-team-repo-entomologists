@@ -1,27 +1,31 @@
 import pygame
 
 class Walker:
-    def __init__(self, x, y, min_x, max_x, speed, size):
-        self.x = x
-        self.y = y
+    def __init__(self, x, y, min_x, max_x, speed, size=32, health=10):
         self.min_x = min_x
         self.max_x = max_x
-        self.speedx = speed
-        self.health = 5
-        self.hitbox = pygame.Rect(self.x, self.y, size, size)
+        self.speed_x = speed
+        self.health = health
+        self.hit = 0
+        self.rect = pygame.Rect(x, y, size, size)
     def draw(self, screen):
-        pygame.draw.rect(screen, (255, 0, 0), self.hitbox)
+        if self.hit > 0:
+            pygame.draw.rect(screen, (255, 255, 255), self.rect)
+            self.hit -= 1
+        else:
+            pygame.draw.rect(screen, (255, 0, 0), self.rect)
 
     def move(self):
-        self.x += self.speedx
+        self.rect.x += self.speed_x
 
-        if self.min_x > self.x > self.max_x:
-            self.speedx *= -1
+        if self.min_x > self.rect.x or self.rect.x > self.max_x:
+            self.speed_x *= -1
 
     def update_hit(self, bullets):
         for bullet in bullets:
-            if pygame.Rect.colliderect(bullet.rect, self.hitbox):
+            if pygame.Rect.colliderect(bullet.rect, self.rect):
                 self.health -= 1
+                self.hit = 5
                 return bullet
 
         return None
@@ -33,8 +37,8 @@ class Enemies:
 
     def enemies_update(self, bullets):
         for enemy in self.enemies:
-            enemy.draw(self.screen)
             enemy.move()
+            enemy.draw(self.screen)
             hit = enemy.update_hit(bullets)
 
             if enemy.health <= 0:

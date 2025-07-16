@@ -4,9 +4,10 @@ import tiles as level
 
 class Player:
     GRAVITY = 1
-    PLAYER_COLOR = pygame.Color("blue")
+    HIT_COLOR = pygame.Color("white")
 
     def __init__(self, x, y, width, height):
+        self.start = (x, y)
         self.rect = pygame.Rect(x, y, width, height)
         self.x_vel = 0
         self.y_vel = 0
@@ -16,8 +17,10 @@ class Player:
         self.fall_count = 0
         self.jump_count = 0
         self.surface = pygame.Surface((self.rect.width, self.rect.height))
-        self.surface.fill(self.PLAYER_COLOR)
-        self.player_health = 500
+        self.hit_surface = pygame.Surface((self.rect.width, self.rect.height))
+        self.hit_surface.fill(self.HIT_COLOR)
+        self.player_health = 10
+        self.hit = 0
 
     def move(self, dx, dy):
         self.rect.x += dx
@@ -57,8 +60,30 @@ class Player:
     def hit_head(self):
         self.y_vel *= -1
 
+    def handle_death(self, objects):
+        obj = []
+        for danger in objects:
+            if pygame.Rect.colliderect(danger.rect, self.rect):
+                obj.append(danger)
+                self.player_health -= 1
+                self.hit = 5
+
+        if self.player_health < 1:
+            self.player_health = 10
+            self.rect.x = self.start[0]
+            self.rect.y = self.start[1]
+
+        return obj
+
+
     def draw(self, screen, x_offset, y_offset):
-        screen.blit(self.surface, (self.rect.x - x_offset, self.rect.y - y_offset))
+        surface = self.surface
+        surface.fill((abs(self.player_health - 10) * 255 // 10, 0, self.player_health * 255 // 10))
+        if self.hit > 0:
+            surface = self.hit_surface
+            self.hit -= 1
+
+        screen.blit(surface, (self.rect.x - x_offset, self.rect.y - y_offset))
 
 
 def handle_move(player, objects):
@@ -68,9 +93,9 @@ def handle_move(player, objects):
     col_right = collide(player, objects, 5)
 
     player.x_vel = 0
-    if keys[pygame.K_LEFT] and not col_left:
+    if (keys[pygame.K_LEFT] or keys[pygame.K_a]) and not col_left:
         player.move_left(5)
-    if keys[pygame.K_RIGHT] and not col_right:
+    if (keys[pygame.K_RIGHT] or keys[pygame.K_d]) and not col_right:
         player.move_right(5)
 
     handle_vertical(player, objects, player.y_vel)
