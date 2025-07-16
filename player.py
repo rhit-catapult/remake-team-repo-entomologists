@@ -21,6 +21,7 @@ class Player:
         self.hit_surface.fill(self.HIT_COLOR)
         self.player_health = 10
         self.hit = 0
+        self.deaths = 0
 
     def move(self, dx, dy):
         self.rect.x += dx
@@ -78,6 +79,7 @@ class Player:
             self.player_health = 10
             self.rect.x = self.start[0]
             self.rect.y = self.start[1]
+            self.deaths += 1
 
         return obj
 

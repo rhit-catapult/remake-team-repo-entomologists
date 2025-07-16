@@ -118,6 +118,7 @@ class Enemies:
         self.screen = screen
         self.enemies = enemies
         self.shots = []
+        self.enemies_killed = 0
 
     def enemies_update(self, bullets, x, y, px, py):
         hit = []
@@ -138,6 +139,7 @@ class Enemies:
 
             if enemy.health <= 0:
                 self.enemies.remove(enemy)
+                self.enemies_killed += 1
 
         for s in self.shots:
             s.move()
