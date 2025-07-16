@@ -17,7 +17,7 @@ class Boss:
         self.bullets = []
         self.ticks = 30
         self.image = pygame.image.load('pixil-frame-0.png')
-        self.image_hit = pygame.image.load('pixil-frame-0.png')
+        self.image_hit = pygame.image.load('pixil-frame-0 (1).png')
 
     def draw(self, screen, x_offset, y_offset):
         if self.hit > 0:
