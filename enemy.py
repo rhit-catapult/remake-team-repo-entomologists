@@ -3,7 +3,7 @@ import math
 
 
 class Boss:
-    def __init__(self, x, y, min_x, max_x, speed, size=200, shoot=False):
+    def __init__(self, x, y, min_x, max_x, speed, size=64, shoot=False):
         self.min_x = min_x
         self.max_x = max_x
         self.speed_x = speed
@@ -12,7 +12,7 @@ class Boss:
         self.shoot = shoot
         self.rect = pygame.Rect(x, y, size, size)
         self.bullets = []
-
+        self.ticks = 10
 
     def draw(self, screen, x_offset, y_offset):
         if self.hit > 0:
@@ -28,16 +28,18 @@ class Boss:
         if self.min_x > self.rect.x or self.rect.x > self.max_x:
             self.speed_x *= -1
     def update_hit(self, bullets):
+        shot = []
         for bullet in bullets:
             if pygame.Rect.colliderect(bullet.rect, self.rect):
                 self.health -= 1
                 self.hit = 5
-                return bullet
+                shot.append(bullet)
 
-        return None
-    def shoot(self, x_off, y_off, screen, px, py):
-        if self.tick < 1:
-            self.tick = 40
+        return shot
+
+    def fire(self, x_off, y_off, screen, px, py):
+        if self.ticks < 1:
+            self.ticks = 10
             dx = px - self.rect.centerx
             dy = py - self.rect.centery
             angle = math.atan2(-dy, dx)
@@ -49,7 +51,7 @@ class Boss:
         if onscreen:
             self.ticks -= 1
         else:
-            self.ticks = 50
+            self.ticks = 10
         return None
 class Walker:
     def __init__(self, x, y, min_x, max_x, speed, size=32, shoot=False):
@@ -68,7 +70,7 @@ class Walker:
             pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(self.rect.x - x_offset, self.rect.y - y_offset, self.rect.width, self.rect.height))
             self.hit -= 1
         else:
-            pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(self.rect.x - x_offset, self.rect.y - y_offset, self.rect.width, self.rect.height))
+            screen.blit(pygame.image.load("enemy_sprit.png"), pygame.Rect(self.rect.x - x_offset, self.rect.y - y_offset, self.rect.width, self.rect.height))
 
     def move(self):
         self.rect.x += self.speed_x
@@ -77,13 +79,14 @@ class Walker:
             self.speed_x *= -1
 
     def update_hit(self, bullets):
+        shot = []
         for bullet in bullets:
             if pygame.Rect.colliderect(bullet.rect, self.rect):
                 self.health -= 1
                 self.hit = 5
-                return bullet
+                shot.append(bullet)
 
-        return None
+        return shot
 
     def fire(self, x_off, y_off, screen, px, py):
         onscreen = 1024 > self.rect.x - x_off > 0 and 576 > self.rect.y - y_off > 0
@@ -123,7 +126,8 @@ class Enemies:
             h = enemy.update_hit(bullets)
 
             if h is not None:
-                hit.append(h)
+                for q in h:
+                    hit.append(q)
 
             if enemy.health <= 0:
                 self.enemies.remove(enemy)
