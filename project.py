@@ -4,6 +4,7 @@ import player as p
 import tiles as level
 import math
 import Weapons as weapons
+import enemy
 
 SCREENWIDTH = 1024
 SCREENHEIGHT = 576
@@ -47,6 +48,9 @@ def main():
     player = p.Player(100, 100, 32, 32)
     gun = weapons.Gun(screen, 0, 0, "Pistol.png", 20, 100)
 
+    enemies = [enemy.Walker(300,480,200,400,2)]
+    enemy_handler = enemy.Enemies(screen, enemies)
+
     tile = level.Tile(0,screen)
     tiles1 = [tile] * 17 + [0] * 14 + [tile] * 2 + [0] * 14 + [tile] * 4 + [0] * 12 + [tile] * 2 + [0] * 15 + [tile] + [0] * 4 + [tile] * 3 + [0] * 8 + [tile] + [0] * 15 + [tile] + [0] * 15 + [tile] * 17
     tiles2 = [tile] * 17 + [0] * 14 + [tile] * 2 + [0] * 14 + [tile] * 2 + [0] * 14 + [tile] + [0] * 15 + [tile] + [0] * 16 + [0] * 16 + [0] * 16 + [tile] * 16
@@ -76,7 +80,7 @@ def main():
                 sys.exit()
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP and player.jump_count < 2:
+                if event.key == pygame.K_UP or event.key == pygame.K_w and player.jump_count < 2:
                     player.jump()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -94,6 +98,13 @@ def main():
         gun.bullet_run(l.rect_tiles)
 
         gun.draw(mouse_pos[0], mouse_pos[1])
+
+        hit = enemy_handler.enemies_update(gun.bullets)
+
+        player.handle_death(enemies)
+
+        if hit is not None:
+            gun.bullets.remove(hit)
 
         pygame.display.update()
 

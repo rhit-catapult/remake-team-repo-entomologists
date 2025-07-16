@@ -1,6 +1,5 @@
 import pygame
 import sys
-import os
 
 class Bullet:
     #origin is a tuple that contains coordinates (x,y)
@@ -14,7 +13,7 @@ class Bullet:
         self.speed_x = speed_x
         self.speed_y = speed_y
         # hitbox is here for init
-        self.hitbox = pygame.Rect(0,0,0,0)
+        self.rect = pygame.Rect(0, 0, 0, 0)
         self.damage = damage
         self.pew = pygame.mixer.Sound('pewpew.wav')
         pygame.mixer.Sound.play(self.pew)
@@ -23,12 +22,12 @@ class Bullet:
     def draw(self, x_offset, y_offset):
         if self.image == 'placeholder':
             pygame.draw.line(self.screen,(255,100,100),(self.x,self.y),(self.x+25,self.y),5)
-            self.hitbox = pygame.Rect(self.x,self.y,25,5)
+            self.rect = pygame.Rect(self.x, self.y, 25, 5)
 
         else:
             self.screen.blit(pygame.transform.scale(pygame.image.load(self.image),(7,7)), (self.x - x_offset, self.y - y_offset))
 
-            self.hitbox = pygame.Rect(self.x,self.y,5,5)
+            self.rect = pygame.Rect(self.x, self.y, 5, 5)
 
 
     def move(self):
@@ -37,7 +36,7 @@ class Bullet:
 
     def collision(self,rectangles):
         for rectangle in rectangles:
-            if pygame.Rect.colliderect(self.hitbox, rectangle):
+            if pygame.Rect.colliderect(self.rect, rectangle):
                 return True
 
         return False
