@@ -46,7 +46,7 @@ class Walker:
             angle = math.atan2(-dy, dx)
             bullet_speed_x = 5 * math.cos(angle)
             bullet_speed_y = -1 * 5 * math.sin(angle)
-            return EnemyBullet(screen, self.rect.centerx - x_off, self.rect.centery - y_off, bullet_speed_x, bullet_speed_y)
+            return EnemyBullet(screen, self.rect.centerx, self.rect.centery, bullet_speed_x, bullet_speed_y)
 
         if onscreen:
             self.ticks -= 1
@@ -62,6 +62,8 @@ class Enemies:
         self.shots = []
 
     def enemies_update(self, bullets, x, y, px, py):
+        hit = []
+
         for enemy in self.enemies:
             enemy.move()
             enemy.draw(self.screen, x, y)
@@ -70,19 +72,19 @@ class Enemies:
                 if b is not None:
                     self.shots.append(b)
 
-            hit = enemy.update_hit(bullets)
+            h = enemy.update_hit(bullets)
+
+            if h is not None:
+                hit.append(h)
 
             if enemy.health <= 0:
                 self.enemies.remove(enemy)
-
-            if hit is not None:
-                return hit
 
         for s in self.shots:
             s.move()
             s.draw(x, y)
 
-        return None
+        return hit
 
 def bullet_hit_wall(level, bullets):
     for bullet in bullets:

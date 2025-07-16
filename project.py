@@ -48,7 +48,16 @@ def main():
     player = p.Player(100, 100, 32, 32)
     gun = weapons.Gun(screen, 0, 0, "Pistol.png", 20, 100)
 
-    enemies = [enemy.Walker(300,480,200,400,2, 32, True), enemy.Walker(300,480,200,400,0, 32, True)]
+    enemies = [enemy.Walker(600,480,200,800,2, 32, False),
+               enemy.Walker(SCREENWIDTH / 2 + SCREENWIDTH * 1,480,0,0,0, 32, True),
+               enemy.Walker(64 + SCREENWIDTH * 1, 200, 0, 0, 0, 32, True),
+               enemy.Walker(SCREENWIDTH - 96 + SCREENWIDTH * 1, 200, 0, 0, 0, 32, True),
+               enemy.Walker(2496, 288, 2496, 2592, 1, 32, False),
+               enemy.Walker(64 + SCREENWIDTH * 2, 64, 0, 0, 0, 32, True),
+               enemy.Walker(2306, -96, 2306, 2850, 3, 32, False),
+               enemy.Walker(4000, -288, 0, 0, 0, 32, True),
+               enemy.Walker(3936, -224, 0, 0, 0, 32, True),
+               enemy.Walker(3870, -160, 0, 0, 0, 32, True)]
     enemy_handler = enemy.Enemies(screen, enemies)
 
     tile = level.Tile(0, screen)
@@ -95,6 +104,7 @@ def main():
     pygame.mixer_music.play(-1)
 
     while True:
+        print(player.rect.x, player.rect.y)
         clock.tick(60)
 
         screen.fill((40, 40, 50))
@@ -140,7 +150,8 @@ def main():
                 enemy_handler.shots.remove(obj)
 
         if hit is not None:
-            gun.bullets.remove(hit)
+            for h in hit:
+                gun.bullets.remove(h)
 
         pygame.display.update()
 
