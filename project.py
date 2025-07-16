@@ -117,7 +117,7 @@ def main():
                 sys.exit()
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP or event.key == pygame.K_w and player.jump_count < 2:
+                if (event.key == pygame.K_UP or event.key == pygame.K_w or event.key == pygame.K_SPACE) and player.jump_count < 2:
                     player.jump()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
