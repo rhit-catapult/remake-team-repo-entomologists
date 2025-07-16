@@ -7,23 +7,30 @@ class Boss:
         self.min_x = min_x
         self.max_x = max_x
         self.speed_x = speed
+        self.start_y = y
+        self.end_y = y - 300
+        self.speed_y = 2
         self.health = 35
         self.hit = 0
         self.shoot = shoot
         self.rect = pygame.Rect(x, y, size, size)
         self.bullets = []
-        self.ticks = 10
+        self.ticks = 30
+        self.image = pygame.image.load('pixil-frame-0.png')
+        self.image_hit = pygame.image.load('pixil-frame-0.png')
 
     def draw(self, screen, x_offset, y_offset):
         if self.hit > 0:
-            pygame.draw.rect(screen, (255, 255, 255),
-            pygame.Rect(self.rect.x - x_offset, self.rect.y - y_offset, self.rect.width, self.rect.height))
+            screen.blit(self.image, (self.rect.x - x_offset, self.rect.y - y_offset))
             self.hit -= 1
         else:
-            pygame.draw.rect(screen, (255, 0, 0),
-            pygame.Rect(self.rect.x - x_offset, self.rect.y - y_offset, self.rect.width, self.rect.height))
+            screen.blit(self.image_hit, (self.rect.x - x_offset, self.rect.y - y_offset))
     def move(self):
         self.rect.x += self.speed_x
+        self.rect.y += self.speed_y
+
+        if self.start_y < self.rect.y or self.rect.y < self.end_y:
+            self.speed_y *= -1
 
         if self.min_x > self.rect.x or self.rect.x > self.max_x:
             self.speed_x *= -1
@@ -39,7 +46,7 @@ class Boss:
 
     def fire(self, x_off, y_off, screen, px, py):
         if self.ticks < 1:
-            self.ticks = 10
+            self.ticks = 30
             dx = px - self.rect.centerx
             dy = py - self.rect.centery
             angle = math.atan2(-dy, dx)
@@ -51,7 +58,7 @@ class Boss:
         if onscreen:
             self.ticks -= 1
         else:
-            self.ticks = 10
+            self.ticks = 30
         return None
 class Walker:
     def __init__(self, x, y, min_x, max_x, speed, size=32, shoot=False):
