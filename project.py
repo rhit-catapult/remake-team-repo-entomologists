@@ -49,16 +49,28 @@ def main():
     gun = weapons.Gun(screen, 0, 0, "Pistol.png", 20, 100)
 
     enemies = [enemy.Walker(600,480,200,800,2, 32, False),
-               enemy.Walker(SCREENWIDTH / 2 + SCREENWIDTH * 1,480,0,0,0, 32, True),
-               enemy.Walker(64 + SCREENWIDTH * 1, 200, 0, 0, 0, 32, True),
-               enemy.Walker(SCREENWIDTH - 96 + SCREENWIDTH * 1, 200, 0, 0, 0, 32, True),
+               enemy.Walker(512 + SCREENWIDTH,480,412 + SCREENWIDTH,612 + SCREENWIDTH,1, 32, True),
+               enemy.Walker(64 + SCREENWIDTH, 200, 0, 0, 0, 32, True),
+               enemy.Walker(SCREENWIDTH - 96 + SCREENWIDTH, 200, 0, 0, 0, 32, True),
                enemy.Walker(2496, 288, 2496, 2592, 1, 32, False),
                enemy.Walker(64 + SCREENWIDTH * 2, 64, 0, 0, 0, 32, True),
                enemy.Walker(2306, -96, 2306, 2850, 3, 32, False),
                enemy.Walker(4000, -288, 0, 0, 0, 32, True),
                enemy.Walker(3936, -224, 0, 0, 0, 32, True),
                enemy.Walker(3870, -160, 0, 0, 0, 32, True),
-               enemy.Walker(3806, -96, 3326, 3806, -2, 32, False)]
+               enemy.Walker(3806, -96, 3326, 3806, -2, 32, False),
+               enemy.Walker(3456, 224, 3456, 3552, 2, 32, True),
+               enemy.Walker(3808, 352, 3712, 3808, -2, 32, True),
+               enemy.Walker(4160, 64, 0, 0, 0, 32, True),
+               enemy.Walker(4832, 224, 4544, 4832, 4, 32, False),
+               enemy.Walker(4160, -96, 0, 0, 0, 32, True),
+               enemy.Walker(4160, -192, 0, 0, 0, 32, True),
+               enemy.Walker(4928, -416, 0, 0, 0, 32, True),
+               enemy.Walker(4992, -480, 0, 0, 0, 32, True),
+               enemy.Walker(4864, -864, 4864, 5024, 4, 32, False),
+               enemy.Walker(4160, -1088, 4160, 5024, 2, 32, True),
+               enemy.Walker(5024, -1088, 4160, 5024, -3, 32, True),
+               enemy.Walker(4160, -864, 4160, 4320, 4, 32, False)               ]
     enemy_handler = enemy.Enemies(screen, enemies)
 
     tile = level.Tile(0, screen)
@@ -101,6 +113,8 @@ def main():
     target_x = 0
     target_y = 0
 
+    fire_rate = 10
+
     pygame.mixer_music.load("Cave Music _) (1).wav")
     pygame.mixer_music.play(-1)
 
@@ -120,8 +134,11 @@ def main():
                 if (event.key == pygame.K_UP or event.key == pygame.K_w or event.key == pygame.K_SPACE) and player.jump_count < 2:
                     player.jump()
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                gun.shoot(mouse_pos[0], mouse_pos[1])
+        if pygame.mouse.get_pressed()[0] and fire_rate < 1:
+            gun.shoot(mouse_pos[0], mouse_pos[1])
+            fire_rate = 10
+
+        fire_rate -= 1
 
         player.loop(60)
         x_offset, y_offset, target_x, target_y = apply_offset(screen, player, l, x_offset, y_offset, target_x, target_y)
