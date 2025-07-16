@@ -61,6 +61,9 @@ def main():
     target_x = 0
     target_y = 0
 
+    pygame.mixer_music.load("Cave Music _) (1).wav")
+    pygame.mixer_music.play(-1)
+
     while True:
         clock.tick(60)
 
