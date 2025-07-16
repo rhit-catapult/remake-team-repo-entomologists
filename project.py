@@ -71,7 +71,7 @@ def main():
                enemy.Walker(4160, -1088, 4160, 5024, 2, 32, True),
                enemy.Walker(5024, -1088, 4160, 5024, -3, 32, True),
                enemy.Walker(4160, -864, 4160, 4320, 4, 32, False),
-               enemy.Boss(3140, -704, 0, 0, 0, 64, True)]
+               enemy.Boss(3140, -704, 3140, 3972, 2, 64, True)]
     enemy_handler = enemy.Enemies(screen, enemies)
 
     tile = level.Tile(0, screen)
