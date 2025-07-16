@@ -70,7 +70,7 @@ class Walker:
             pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(self.rect.x - x_offset, self.rect.y - y_offset, self.rect.width, self.rect.height))
             self.hit -= 1
         else:
-            pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(self.rect.x - x_offset, self.rect.y - y_offset, self.rect.width, self.rect.height))
+            screen.blit(pygame.image.load("enemy_sprit.png"), pygame.Rect(self.rect.x - x_offset, self.rect.y - y_offset, self.rect.width, self.rect.height))
 
     def move(self):
         self.rect.x += self.speed_x
