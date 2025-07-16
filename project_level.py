@@ -1,5 +1,5 @@
 import pygame
-
+import boss as b
 
 
 
@@ -46,14 +46,16 @@ def apply_offset(screen, player, l, x_offset, y_offset, target_x, target_y):
 
     return x_offset, y_offset, target_x, target_y
 
-
 def main():
     pygame.init()
     pygame.display.set_caption("Platformer")
     screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
     clock = pygame.time.Clock()
 
-    player = p.Player(4200, -630, 32, 32)
+    Ethan_Faust = b.Boss(400, 200)
+
+
+    player = p.Player(400, 400, 32, 32)
 
     tile = level.Tile(0,screen)
     tile2 = level.Tile(1,screen)
@@ -82,6 +84,8 @@ def main():
         clock.tick(60)
 
         screen.fill((40, 40, 50))
+
+        b.Boss.draw(Ethan_Faust)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
