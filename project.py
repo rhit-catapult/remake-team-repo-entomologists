@@ -1,6 +1,7 @@
 import pygame
 import sys
 import player as p
+import scoreboard
 import tiles as level
 import math
 import Weapons as weapons
@@ -45,6 +46,8 @@ def main():
     screen = pygame.display.set_mode((SCREENWIDTH, SCREENHEIGHT))
     clock = pygame.time.Clock()
 
+    score = scoreboard.Scoreboard(screen)
+
     player = p.Player(100, 100, 32, 32)
     gun = weapons.Gun(screen, 0, 0, "Pistol.png", 20, 100)
 
@@ -71,7 +74,7 @@ def main():
                enemy.Walker(4160, -1088, 4160, 5024, 2, 32, True),
                enemy.Walker(5024, -1088, 4160, 5024, -3, 32, True),
                enemy.Walker(4160, -864, 4160, 4320, 4, 32, False),
-               enemy.Boss(3140, -704, 0, 0, 0, 64, True)]
+               enemy.Boss(3140, -704, 3140, 3972, 2, 64, True)]
     enemy_handler = enemy.Enemies(screen, enemies)
 
     tile = level.Tile(0, screen)
@@ -120,7 +123,6 @@ def main():
     pygame.mixer_music.play(-1)
 
     while True:
-        print(player.rect.x, player.rect.y)
         clock.tick(60)
 
         screen.fill((40, 40, 50))
@@ -172,6 +174,9 @@ def main():
             for h in hit:
                 if h in gun.bullets:
                     gun.bullets.remove(h)
+
+        score.update(enemy_handler.enemies_killed * 2 - player.deaths)
+        score.draw()
 
         pygame.display.update()
 
