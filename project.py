@@ -122,7 +122,10 @@ def main():
     pygame.mixer_music.load("Cave Music _) (1).wav")
     pygame.mixer_music.play(-1)
 
-    while True:
+    won = False
+    win_ticks = 500
+
+    while not won:
         clock.tick(60)
 
         screen.fill((40, 40, 50))
@@ -177,6 +180,19 @@ def main():
 
         score.update(enemy_handler.enemies_killed * 2 - player.deaths)
         score.draw()
+
+        for e in enemies:
+            if e.__class__ == enemy.Boss:
+                break
+        else:
+            if win_ticks == 500:
+                win_ticks = 300
+                pygame.mixer.Sound.play(pygame.mixer.Sound('Boss_Death.wav'))
+
+        if win_ticks < 500:
+            win_ticks -= 1
+            if win_ticks < 1:
+                won = True
 
         pygame.display.update()
 
