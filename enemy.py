@@ -71,13 +71,14 @@ class Walker:
         self.shoot = shoot
         self.bullets = []
         self.ticks = 50
+        self.image = pygame.image.load("enemy_sprit.png")
 
     def draw(self, screen, x_offset, y_offset):
         if self.hit > 0:
             pygame.draw.rect(screen, (255, 255, 255), pygame.Rect(self.rect.x - x_offset, self.rect.y - y_offset, self.rect.width, self.rect.height))
             self.hit -= 1
         else:
-            screen.blit(pygame.image.load("enemy_sprit.png"), pygame.Rect(self.rect.x - x_offset, self.rect.y - y_offset, self.rect.width, self.rect.height))
+            screen.blit(self.image, pygame.Rect(self.rect.x - x_offset, self.rect.y - y_offset, self.rect.width, self.rect.height))
 
     def move(self):
         self.rect.x += self.speed_x
@@ -122,6 +123,7 @@ class Enemies:
 
     def enemies_update(self, bullets, x, y, px, py):
         hit = []
+        remove_enemies = []
 
         for enemy in self.enemies:
             enemy.move()
@@ -138,12 +140,15 @@ class Enemies:
                     hit.append(q)
 
             if enemy.health <= 0:
-                self.enemies.remove(enemy)
-                self.enemies_killed += 1
+                remove_enemies.append(enemy)
 
         for s in self.shots:
             s.move()
             s.draw(x, y)
+
+        for e in remove_enemies:
+            self.enemies.remove(e)
+            self.enemies_killed += 1
 
         return hit
 
