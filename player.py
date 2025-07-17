@@ -59,7 +59,7 @@ class Player:
         self.jump_count = 0
 
     def hit_head(self):
-        self.y_vel *= -1
+        self.y_vel *= -0.5
 
     def handle_death(self, objects):
         obj = []
