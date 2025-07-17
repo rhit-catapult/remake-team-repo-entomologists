@@ -201,8 +201,8 @@ def main():
         font1 = pygame.font.SysFont('Times New Roman', 90)
         texta = pygame.font.Font.render(font1,f'Score: {5+enemy_handler.enemies_killed * 2 - player.deaths}', True, (255,255,255))
         textb = pygame.font.Font.render(font, 'You Win', True, (255,255,255))
-        screen.blit(texta, (512-140, 300))
-        screen.blit(textb, (512-210, 100))
+        screen.blit(texta, (512 - texta.get_width() / 2, 300))
+        screen.blit(textb, (512 - textb.get_width() / 2, 100))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
