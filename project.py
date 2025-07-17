@@ -233,13 +233,41 @@ def main():
 
     while True:
         screen.fill((40, 40, 50))
+
+        score = 5+enemy_handler.enemies_killed * 2 - player.deaths
+        time = (end_time - start_time) // 1000
+
         font = pygame.font.SysFont('Times New Roman', 128)
-        font1 = pygame.font.SysFont('Times New Roman', 90)
-        texta = pygame.font.Font.render(font1,f'Score: {5+enemy_handler.enemies_killed * 2 - player.deaths}, Time: {(end_time - start_time) // 1000}',
+        font1 = pygame.font.SysFont('Times New Roman', 70)
+        texta = pygame.font.Font.render(font1,f'Score: {score}, Time: {time}',
                                         True, (255,255,255))
         textb = pygame.font.Font.render(font, 'You Win', True, (255,255,255))
-        screen.blit(texta, (512 - texta.get_width() / 2, 300))
+
+        try:
+            with open('high_score.txt', 'r') as f:
+                high_score = int(f.read())
+        except (FileNotFoundError, ValueError):
+            high_score = 0
+
+        if high_score < score:
+            with open('high_score.txt', 'w') as f:
+                f.write(str(score))
+
+        try:
+            with open('high_time.txt', 'r') as f:
+                high_time = int(f.read())
+        except (FileNotFoundError, ValueError):
+            high_time = 1000000
+
+        if high_time > time:
+            with open('high_time.txt', 'w') as f:
+                f.write(str(time))
+
+        textc = pygame.font.Font.render(font1, f'Best Score: {high_score}, Best Time: {high_time}', True, (255,255,255))
+
+        screen.blit(texta, (512 - texta.get_width() / 2, 250))
         screen.blit(textb, (512 - textb.get_width() / 2, 100))
+        screen.blit(textc, (512 - textc.get_width() / 2, 350))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
