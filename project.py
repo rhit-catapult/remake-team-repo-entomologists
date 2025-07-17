@@ -48,7 +48,7 @@ def main():
 
     score = scoreboard.Scoreboard(screen)
 
-    player = p.Player(100, 100, 32, 32)
+    player = p.Player(96, 160, 32, 32)
     gun = weapons.Gun(screen, 0, 0, "Pistol.png", 20, 100)
 
     start_time = 0
