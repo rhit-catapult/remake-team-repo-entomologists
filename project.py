@@ -186,7 +186,7 @@ def main():
                 break
         else:
             if win_ticks == 500:
-                win_ticks = 300
+                win_ticks = 200
                 pygame.mixer.Sound.play(pygame.mixer.Sound('Boss_Death.wav'))
 
         if win_ticks < 500:
