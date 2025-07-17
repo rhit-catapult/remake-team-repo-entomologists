@@ -125,6 +125,32 @@ def main():
     won = False
     win_ticks = 500
 
+    enter_screen = True
+
+    while enter_screen:
+        screen.fill((40, 40, 50))
+
+        font = pygame.font.SysFont('Times New Roman', 128)
+        font1 = pygame.font.SysFont('Times New Roman', 70)
+        textc = pygame.font.Font.render(font, 'Grime and', True,(255, 255, 255))
+        textd = pygame.font.Font.render(font, 'Gunpowder', True,(255, 255, 255))
+        texte = pygame.font.Font.render(font1, 'Click to Begin', True, (255, 255, 255))
+
+        screen.blit(textc, (512 - textc.get_width() / 2, 100))
+        screen.blit(textd, (512 - textd.get_width() / 2, 200))
+        screen.blit(texte, (512 - texte.get_width() / 2, 400))
+
+
+        for event in pygame.event.get():
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                enter_screen = False
+
+            if event.type == pygame.QUIT:
+                sys.exit()
+        pygame.display.update()
+
+
     while not won:
         clock.tick(60)
 
