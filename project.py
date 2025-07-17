@@ -208,7 +208,11 @@ def main():
                 if h in gun.bullets:
                     gun.bullets.remove(h)
 
-        score.update(enemy_handler.enemies_killed * 2 - player.deaths, (pygame.time.get_ticks() - start_time) // 1000)
+        if win_ticks < 300:
+            score.update(enemy_handler.enemies_killed * 2 - player.deaths, (end_time - start_time) // 1000)
+        else:
+            score.update(enemy_handler.enemies_killed * 2 - player.deaths, (pygame.time.get_ticks() - start_time) // 1000)
+
         score.draw()
 
         for e in enemies:
