@@ -8,7 +8,7 @@ class Boss:
         self.max_x = max_x
         self.speed_x = speed
         self.start_y = y
-        self.end_y = y - 300
+        self.end_y = y - 200
         self.speed_y = 2
         self.health = 35
         self.hit = 0
@@ -21,10 +21,10 @@ class Boss:
 
     def draw(self, screen, x_offset, y_offset):
         if self.hit > 0:
-            screen.blit(self.image, (self.rect.x - x_offset, self.rect.y - y_offset))
+            screen.blit(self.image_hit, (self.rect.x - x_offset, self.rect.y - y_offset))
             self.hit -= 1
         else:
-            screen.blit(self.image_hit, (self.rect.x - x_offset, self.rect.y - y_offset))
+            screen.blit(self.image, (self.rect.x - x_offset, self.rect.y - y_offset))
     def move(self):
         self.rect.x += self.speed_x
         self.rect.y += self.speed_y
