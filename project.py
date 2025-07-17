@@ -51,6 +51,9 @@ def main():
     player = p.Player(100, 100, 32, 32)
     gun = weapons.Gun(screen, 0, 0, "Pistol.png", 20, 100)
 
+    start_time = 0
+    end_time = 0
+
     enemies = [enemy.Walker(600,480,200,800,2, 32, False),
                enemy.Walker(512 + SCREENWIDTH,480,412 + SCREENWIDTH,612 + SCREENWIDTH,1, 32, True),
                enemy.Walker(64 + SCREENWIDTH, 200, 0, 0, 0, 32, True),
@@ -150,6 +153,7 @@ def main():
                 sys.exit()
         pygame.display.update()
 
+    start_time = pygame.time.get_ticks()
 
     while not won:
         clock.tick(60)
@@ -204,7 +208,7 @@ def main():
                 if h in gun.bullets:
                     gun.bullets.remove(h)
 
-        score.update(enemy_handler.enemies_killed * 2 - player.deaths)
+        score.update(enemy_handler.enemies_killed * 2 - player.deaths, (pygame.time.get_ticks() - start_time) // 1000)
         score.draw()
 
         for e in enemies:
@@ -214,6 +218,7 @@ def main():
             if win_ticks == 500:
                 win_ticks = 200
                 pygame.mixer.Sound.play(pygame.mixer.Sound('Boss_Death.wav'))
+                end_time = pygame.time.get_ticks()
 
         if win_ticks < 500:
             win_ticks -= 1
@@ -221,11 +226,13 @@ def main():
                 won = True
 
         pygame.display.update()
+
     while True:
         screen.fill((40, 40, 50))
         font = pygame.font.SysFont('Times New Roman', 128)
         font1 = pygame.font.SysFont('Times New Roman', 90)
-        texta = pygame.font.Font.render(font1,f'Score: {5+enemy_handler.enemies_killed * 2 - player.deaths}', True, (255,255,255))
+        texta = pygame.font.Font.render(font1,f'Score: {5+enemy_handler.enemies_killed * 2 - player.deaths}, Time: {(end_time - start_time) // 1000}',
+                                        True, (255,255,255))
         textb = pygame.font.Font.render(font, 'You Win', True, (255,255,255))
         screen.blit(texta, (512 - texta.get_width() / 2, 300))
         screen.blit(textb, (512 - textb.get_width() / 2, 100))
